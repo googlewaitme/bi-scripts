@@ -1,0 +1,4 @@
+pandas==2.1.1
+tapi_yandex_direct==2021.5.29
+psycopg2==2.9.9
+environs==9.5.0
