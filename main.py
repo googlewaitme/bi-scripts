@@ -1,11 +1,15 @@
 import datetime
 import logging
 from typing import Any
+from inspect import getsourcefile
+from os.path import abspath
+
 import pandas as pd
 from environs import Env
 
 from yandex_direct_api import DirectApi
 from db_connector import DBConnector
+
 
 
 def get_db(env: Env) -> DBConnector:
@@ -54,9 +58,18 @@ def data_preparation(raw_data: str) -> list[list[Any]]:
     return list_of_lists
 
 
+def get_path_to_dotenv() -> str:
+    path_to_cur_file = abspath(getsourcefile(lambda:0))
+    last_slash = path_to_cur_file.rfind("/")
+    path_to_cur_dir = path_to_cur_file[:last_slash]
+    path_to_env_file = path_to_cur_dir + "/.env"
+    return path_to_env_file
+
+
 def main():
     env = Env()
-    env.read_env()
+    path_to_env_file = get_path_to_dotenv()
+    env.read_env(path_to_env_file)
     db = get_db(env)
 
     api = get_direct_api(env)
